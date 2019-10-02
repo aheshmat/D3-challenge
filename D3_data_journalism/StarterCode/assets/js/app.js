@@ -20,12 +20,12 @@ var chart = svg.append('g');
 d3.select(".chart").append("div").attr("class", "tooltip").style("opacity", 0);
 
 // Run through CSV file and execute functions
-d3.csv("../data/data.csv", function(err, healthData) {
+d3.csv("assets/data/data.csv", function(err, healthData) {
     if(err) throw err;
 
     healthData.forEach(function(data) {
         data.poverty = +data.poverty;
-        data.phys_act = +data.phys_act;
+        data.obesity = +data.obesity;
     });
     
     // Create scale functions
@@ -51,11 +51,11 @@ d3.csv("../data/data.csv", function(err, healthData) {
     });
 
     yMin = d3.min(healthData, function(data) {
-        return +data.phys_act * 0.98;
+        return +data.obesity * 0.98;
     });
 
     yMax = d3.max(healthData, function(data) {
-        return +data.phys_act *1.02;
+        return +data.obesity *1.02;
     });
     
     xLinearScale.domain([xMin, xMax]);
@@ -70,9 +70,9 @@ d3.csv("../data/data.csv", function(err, healthData) {
         .html(function(data) {
             var stateName = data.state;
             var pov = +data.poverty;
-            var physAct = +data.phys_act;
+            var physAct = +data.obesity;
             return (
-                stateName + '<br> Poverty: ' + pov + '% <br> Physically Active: ' + physAct +'%'
+                stateName + '<br> Poverty: ' + pov + '% <br> Obesity: ' + physAct +'%'
             );
         });
 
@@ -87,7 +87,7 @@ d3.csv("../data/data.csv", function(err, healthData) {
             return xLinearScale(data.poverty)
         })
         .attr("cy", function(data, index) {
-            return yLinearScale(data.phys_act)
+            return yLinearScale(data.obesity)
         })
         .attr("r", "15")
         .attr("fill", "lightblue")
@@ -112,7 +112,7 @@ d3.csv("../data/data.csv", function(err, healthData) {
                 return xLinearScale(data.poverty - 0);
             })
             .attr("y", function(data) {
-                return yLinearScale(data.phys_act - 0.2);
+                return yLinearScale(data.obesity - 0.2);
             })
             .text(function(data) {
                 return data.abbr
@@ -135,7 +135,7 @@ d3.csv("../data/data.csv", function(err, healthData) {
         .attr("x", 0 - height/2)
         .attr("dy","1em")
         .attr("class", "axis-text")
-        .text("Physically Active (%)")
+        .text("Obesity (%)")
 
     // Append x-axis labels
     chart
